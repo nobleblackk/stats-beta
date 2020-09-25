@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<!--
+    "Thanks to HTML5 UP for this template".
+    Massively by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+    <head>
+        <!-- Code Render-->
+        <link rel="stylesheet" href="../../data/syntaxhighlighter/styles/agate.css">
+        <script src="../../data/syntaxhighlighter/highlight.pack.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+
+        <!--MathJax-->
+        <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+                                config: ["MMLorHTML.js"],
+                                extensions: ["mml2jax.js"],
+                                jax: ["input/MathML"]
+                            });
+
+        </script>
+        <script type="text/javascript" async
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+        </script>
+
+        <!-- Adding a scrollbar in math formula-->
+        <style>
+            .math-container {
+            overflow-x: auto;
+            display: block;
+        }
+        </style>
+
+        
+        <title>Law of Large Numbers and Central Limit Theorem</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="../../data/assets/css/main.css" />
+        <noscript><link rel="stylesheet" href="../../data/assets/css/noscript.css" /></noscript>
+    </head>
+    <body class="is-preload">
+
+        <!-- Wrapper -->
+            <div id="wrapper">
+
+                <!-- Header -->
+                    <header id="header">
+                        <a href="index.html" class="logo">Statistics</a>
+                    </header>
+
+                <!-- Nav -->
+                    <nav id="nav">
+                        <ul style="font-size: smaller;" class="links">
+                            <li><a href="../lln_clt.html">LLN/CLT</a></li>
+                            <li class="active"><a href="lln-py.html">LLN Simulation(Python)</a></li>
+                            <li><a href="lln-jl.html">LLN Simulation(Julia)</a></li>
+                        </ul>
+                        <ul class="icons">
+                            <li><a target="_blank" href="https://quantml.org/" style="border-bottom-color: transparent;"><img style="margin-right: 5px; margin-left: 5px;" class="logo-nav" src="../../data/icon.png" alt="logo" width="20" height="20"></a></li>
+							<li><a target="_blank" href="https://join.slack.com/t/quantml-org/shared_invite/zt-hcmbg7fr-jPbVAUT_tjGPaKWU50qMYQ" class="fab fa-slack slack-nav" style="color: blue;"><span class="label"></span></a></li>
+                            <li><a target="_blank" href="https://www.linkedin.com/in/yuvraj97/" class="icon brands fa-linkedin"><span class="label">Linkedin</span></a></li>
+                            <li><a target="_blank" href="https://github.com/yuvraj97/" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+
+                        </ul>
+                    </nav>
+
+
+                <!-- Main -->
+                    <div id="main">
+                        <section class="post">
+<div class='buttons'>
+    <button onclick="window.location.href = '../lln_clt.html';">&#x25C0;&nbsp;&nbsp; LLN/CLT</button>
+    <button style="float: right;" onclick="window.location.href = 'lln-jl.html';">LLN Simulation(Julia)&nbsp;&nbsp;&#x25B6;</button>
+</div><br>
+<p>
+    <pre><code class="python" id="py" style="border-radius: 20px; padding-left: 30px;">
+from numpy.random import normal, exponential, binomial, geometric
+from lln import lln # you can get lln.py <a href="lln.py"><i class="fa fa-download" aria-hidden="true"></i></a>
+    </code></pre>
+
+<h3 id="normal">Simulating Normal Distribution</h3>
+Now assume that our <b>sample</b> \(X_1,X_2,....,X_n\) is drawn from a Normal Distribution, <span class="bb">\(X_i\sim\mathcal{N}(\mu,\sigma)\)</span>.<br>
+<blockquote>
+In <a href="https://numpy.org/doc/1.16/reference/routines.random.html">Numpy</a> Normal Distribution is denoted as \(\mathcal{N}(\mu,\sigma)\) (rather then \(\mathcal{N}(\mu,\sigma^2)\))  
+where \(\sigma\) is standard deviation.<br>
+</blockquote>
+
+Now let's check how <a href="../lln_clt.html#lln">LLN</a>
+behaves for Normal Distribution, \(\mathcal{N}(\mu,\sigma)\)<br>
+Our expectation is \[\left|\overline{X}_n -\mu \right| \xrightarrow [n\to \infty ]{\mathbb{P},\mbox{ a.s.}} 0\]
+
+<pre><code class="python" id="py" style="border-radius: 20px; padding-left: 30px;">
+mu, sigma = 0, 1
+nlim=300
+distribution = normal(mu, sigma, nlim)
+lln(
+    distribution, 
+    mean = mu, 
+    nlim = nlim, 
+    name = f'$N(\\mu={mu}, \\sigma={sigma})$'
+    )
+</code></pre>
+O/P:
+<img src="lln-py-1.png" style="max-width: 100%;"><br>
+<br>
+
+
+
+<h3 id="exponential">Simulating Exponential Distribution</h3>
+Now assume that our <b>sample</b> \(X_1,X_2,....,X_n\) is drawn from a Exponential Distribution, <span class="bb">\(X_i\sim Exp(\lambda)\)</span>.<br>
+<blockquote>
+In <a href="https://numpy.org/doc/1.16/reference/routines.random.html">Numpy</a> Exponential Distribution is denoted as \(Exp(\theta)\) (rather then \(Exp(\lambda)\))  
+where \(\theta=\frac{1}{\lambda}\).<br>
+So pdf of \(X_i\) is 
+\[f(X=x)=\frac{1}{\theta} \exp\left( -\frac{x}{\theta} \right)\]
+</blockquote>
+Now let's check how <a href="../lln_clt.html#lln">LLN</a>
+behaves for Exponential Distribution, <span class="bb">\(Exp(\theta)\)</span>.<br>
+Our expectation is \[\left|\overline{X}_n -\theta \right| \xrightarrow [n\to \infty ]{\mathbb{P},\mbox{ a.s.}} 0\]
+
+<pre><code class="python" id="py" style="border-radius: 20px; padding-left: 30px;">
+theta = 1/30
+nlim=300
+""" 𝐗 ∼ Exp(θ); pdf: f(𝐗=x) = (1/θ)e^(-x/θ) """
+distribution = exponential(theta, nlim)
+lln(
+    distribution, 
+    mean = theta, 
+    nlim = nlim, 
+    name = f'$Exp(\\theta={theta})$'
+    )
+</code></pre>
+O/P:
+<img src="lln-py-2.png" style="max-width: 100%;"><br>
+<br>
+
+<h3 id="bernoulli">Simulating Bernoulli Distribution</h3>
+Now assume that our <b>sample</b> \(X_1,X_2,....,X_n\)is drawn from a Bernoulli Distribution,\(X_i\sim \text{Ber}(p)\) 
+pmf of\(X_i\)is 
+
+\[f(x,p)=  \left\{\begin{matrix}
+p&; \text{if} &x=1\\
+1-p&; \text{if} &x=0
+\end{matrix}\right.\]
+
+<blockquote> <a href="https://numpy.org/doc/1.16/reference/routines.random.html">Numpy</a> Bernoulli Distribution is denoted as \(\text{Bernoulli}(p)\)</blockquote>
+
+Now let's check <a href="../lln_clt.html#lln">LLN</a>
+behaves for Bernoulli Distribution,\(\text{Ber}(p)\) 
+Our expectation is\[\left|\overline{X}_n - p \right| \xrightarrow [n\to \infty ]{\mathbb{P},\mbox{ a.s.}} 0\]
+
+<pre><code class="python" id="py" style="border-radius: 20px; padding-left: 30px;">
+p = 0.5
+nlim=300
+distribution = binomial(1, p, nlim)
+lln(
+    distribution, 
+    mean = p, 
+    nlim = nlim, 
+    name = f'$Ber(p={p})$'
+    )
+</code></pre>
+O/P:
+<img src="lln-py-3.png" style="max-width: 100%;"><br>
+<br>
+
+<h3>Simulating Geometric Distribution</h3>
+
+Now assume that our \(X_1,X_2,....,X_n\) is drawn from a Geometric Distribution, \(X_i\sim \text{Geo}(p)\)<br>
+pmf of $X_i$ is,
+
+\[f(p)=  (1-p)^{k-1}p\]
+
+<blockquote>
+In <a href="https://numpy.org/doc/1.16/reference/routines.random.html">Numpy</a> Geometric Distribution is denoted as \(\text{Geometric}(p)\)
+</blockquote>
+
+Now let's check how <a href="../lln_clt.html#lln">LLN</a>
+behaves for Geometric Distribution, \(\text{Geo}(p)\)<br>
+<br>
+Our expectation is \[\left|\overline{X}_n -\mu \right| \xrightarrow [n\to \infty ]{\mathbb{P},\mbox{ a.s.}} 0\]
+    
+<pre><code class="python" id="py" style="border-radius: 20px; padding-left: 30px;">
+p = 0.5
+nlim=300
+distribution = geometric(p, nlim)
+lln(
+    distribution, 
+    mean = 1/p, 
+    nlim = nlim, 
+    name = f'$Geo(p={p})$'
+    )
+</code></pre>
+O/P:
+<img src="lln-py-4.png" style="max-width: 100%;"><br>
+<br>
+
+    
+
+</p>
+
+<br><br>
+<div class='buttons'>
+    <button onclick="window.location.href = '../lln_clt.html';">&#x25C0;&nbsp;&nbsp; LLN/CLT</button>
+    <button style="float: right;" onclick="window.location.href = 'lln-jl.html';">LLN Simulation(Julia)&nbsp;&nbsp;&#x25B6;</button>
+</div><br>
+                        </section>
+                    </div>
+            </div>
+        <!-- Scripts -->
+            <script src="../../data/assets/js/jquery.min.js"></script>
+            <script src="../../data/assets/js/jquery.scrollex.min.js"></script>
+            <script src="../../data/assets/js/jquery.scrolly.min.js"></script>
+            <script src="../../data/assets/js/browser.min.js"></script>
+            <script src="../../data/assets/js/breakpoints.min.js"></script>
+            <script src="../../data/assets/js/util.js"></script>
+            <script src="../../data/assets/js/main.js"></script>
+
+    </body>
+</html>
